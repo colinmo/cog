@@ -18,8 +18,8 @@ document.getElementById('mooringwidth').onchange = adjustCog;
 document.getElementById('holewidth').onchange = adjustCog;
   
 function drawTheCircle(paper, outercirclesize, innercirclesize, pitchcirclesize, numberofteeth, brushsize, outerfuzz, innerfuzz, pitchfuzz, linecolor, fillcolor, hollowsize, numberofspokes, widthofspokes, mooringwidth, holewidth) {
-  var linecolor = "#"+linecolor;
-  var fillcolor = "#"+fillcolor;
+  var linecolor       = "#"+linecolor;
+  var fillcolor       = "#"+fillcolor;
   var outercircler    = outercirclesize / 2;
   var innercircler    = innercirclesize / 2;
   var pitchcircler    = pitchcirclesize / 2;
@@ -88,7 +88,11 @@ function drawTheCircle(paper, outercirclesize, innercirclesize, pitchcirclesize,
   
   toDraw+=spokeLines;
   toDraw+="z";
-  spokes = paper.path(toDraw).attr({stroke: linecolor, 'stroke-width': brushsize, 'fill': fillcolor, 'rotation':0,'fill-rule':'evenodd'});
+  if (toDraw !== 'z') {
+    spokes = paper.path(toDraw).attr({stroke: linecolor, 'stroke-width': brushsize, 'fill': fillcolor, 'rotation':0,'fill-rule':'evenodd'});
+  } else {
+    spokes = null;
+  }
 
   // End spikes
   
@@ -235,7 +239,9 @@ function calculateNewCircle(outer, inner, pitch, oldteeth, newteeth, brushsize, 
 }
 
 function adjustCog() {
+  if (spokes !== null) {
    spokes.remove();
+ }
    cog.remove(); 
    document.getElementById('savelink').href="index.php?outercirclesize="+parseInt(document.getElementById('outercirclesize').value,10)+
    "&innercirclesize="+parseInt(document.getElementById('innercirclesize').value,10)+
@@ -281,6 +287,5 @@ $('#bSave').click(function() {
 
 $(document).ready(function() {
     paper = Raphael("gauge", 420, 420);
-    jscolor_init();
     drawTheCircle(paper, outercirclesize, innercirclesize, pitchcirclesize, numberofteeth, brushsize, outerfuzz, innerfuzz, pitchfuzz, linecolor, fillcolor, hollowsize, numberofspokes, widthofspokes, mooringwidth, holewidth);
 });
